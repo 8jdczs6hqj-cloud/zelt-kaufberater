@@ -113,8 +113,7 @@ svg text{font-family:inherit}
 </head>
 <body>
 <div class="wrap">
-  <h1 id="egg" style="cursor:pointer" title="⛺">Zelt-Kaufberater</h1>
-  <div id="eggMsg" style="display:none;background:var(--good-bg);color:var(--good);border-radius:10px;padding:10px 14px;font-size:13px;margin:6px 0 2px">⛺ Wandergruppen-approved · Berg heil! 🥾 &nbsp;—&nbsp; und Axel: diesmal das Zelt <b>richtig rum</b> aufbauen, dann läuft dir das Wasser nicht drunter. 😉</div>
+  <h1>Zelt-Kaufberater</h1>
   <p class="sub">Nur verifizierte, dauerhafte Eigenschaften (Preis &amp; Verfügbarkeit bewusst raus). Regler = deine Gewichtung · Punkte = gewichteter Schnitt der 7 Noten · Matten-Check = passen 2× 65-cm-Matten am Fußende?</p>
 
   <div class="grid2">
@@ -349,7 +348,6 @@ CRIT.forEach(function(c){
   slBox.appendChild(r);r.querySelector('input').addEventListener('input',render);
 });
 $('reset').addEventListener('click',function(){CRIT.forEach(function(c){$('s_'+c.k).value=c.def});render()});
-$('egg').addEventListener('click',function(){var e=$('eggMsg');e.style.display=e.style.display==='none'?'block':'none'});
 ['fTyp','fMatte','fKg','fLen','fHoehe','fFrei'].forEach(function(id){$(id).addEventListener('input',render)});
 
 function weights(){var w={},sum=0;CRIT.forEach(function(c){var v=+$('s_'+c.k).value;w[c.k]=v;sum+=v});if(sum===0){CRIT.forEach(function(c){w[c.k]=1});sum=CRIT.length}return {w:w,sum:sum}}
