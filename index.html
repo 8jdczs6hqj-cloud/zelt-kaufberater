@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zelt-Kaufberater — Eigenschaften-Vergleich (verifiziert)</title>
+<style>
+:root{
+  --bg:#f7f6f2;--surface:#fff;--surface2:#f1efe8;--line:#e2e0d8;--line2:#c9c7bd;
+  --ink:#1f1e1b;--ink2:#5f5e58;--ink3:#8a887f;
+  --accent:#185fa5;--accent-bg:#e6f1fb;
+  --good:#3b6d11;--good-bg:#eaf3de;
+  --warn:#8a5206;--warn-bg:#faeeda;
+  --bad:#a32d2d;--bad-bg:#fcebeb;
+  --radius:10px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#191917;--surface:#232320;--surface2:#2c2c28;--line:#33332e;--line2:#44443d;
+  --ink:#f2f1ea;--ink2:#c3c2b7;--ink3:#8f8e84;
+  --accent:#5a9be6;--accent-bg:#123047;
+  --good:#9ec96a;--good-bg:#1d2c10;
+  --warn:#e2a94b;--warn-bg:#3a2a0d;
+  --bad:#e07777;--bad-bg:#3a1616;
+}}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:960px;margin:0 auto;padding:24px 18px 64px}
+h1{font-size:23px;font-weight:600;margin:0 0 4px}
+h2{font-size:17px;font-weight:600;margin:30px 0 12px}
+.sub{color:var(--ink2);font-size:14px;margin:0 0 4px}
+.note{background:var(--accent-bg);color:var(--ink);border-radius:var(--radius);padding:12px 14px;font-size:13px;margin-top:12px}
+.note b{color:var(--accent)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-top:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media (max-width:720px){.grid2{grid-template-columns:1fr;gap:10px}}
+.ctrlrow{display:grid;grid-template-columns:150px 1fr 46px;align-items:center;gap:10px;margin-bottom:7px}
+.ctrlrow label{font-size:13px;color:var(--ink2)}
+.ctrlrow .val{font-size:13px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent);height:22px}
+.filters{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+.filt{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--ink2);min-width:140px}
+.filt .val{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.chk{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink);cursor:pointer;user-select:none}
+.chk input{width:16px;height:16px;accent-color:var(--accent)}
+select,button{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:5px 8px}
+button{cursor:pointer}button:hover{background:var(--surface2)}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+@media (max-width:720px){.metrics{grid-template-columns:1fr 1fr}}
+.metric{background:var(--surface2);border-radius:var(--radius);padding:12px 14px}
+.metric .k{font-size:12px;color:var(--ink3);margin-bottom:3px}
+.metric .v{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+.metric .v small{font-size:13px;font-weight:400;color:var(--ink2)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink2);margin:2px 0 12px}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.rankrow{display:grid;grid-template-columns:22px 1fr 100px 30px 20px;align-items:center;gap:8px;margin-bottom:7px}
+@media (max-width:720px){.rankrow{grid-template-columns:18px 1fr 46px 26px 18px;gap:6px}}
+.ex{cursor:pointer;color:var(--ink3);text-align:center;font-size:16px;line-height:1;user-select:none}
+.ex:hover{color:var(--bad)}
+.rankrow .rn{font-size:12px;color:var(--ink3);text-align:right;font-variant-numeric:tabular-nums}
+.rankrow .nm{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.rankrow .nm:hover{text-decoration:underline}
+.track{height:13px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.bar{height:100%;border-radius:4px}
+.rankrow .sc{font-size:13px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.tags{margin-left:6px;font-size:11px;padding:1px 6px;border-radius:6px;vertical-align:1px}
+.t-pick{background:var(--good-bg);color:var(--good)}
+.t-falle{background:var(--bad-bg);color:var(--bad)}
+.t-3p{background:var(--accent-bg);color:var(--accent)}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:900px}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:var(--surface2);font-weight:600;cursor:pointer;position:sticky;top:0;color:var(--ink2)}
+th:hover{color:var(--ink)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.falle td:first-child{box-shadow:inset 3px 0 var(--bad)}
+tr:hover td{background:var(--surface2)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
+.card.pick{border:2px solid var(--good)}
+.card-h{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer}
+.card-h .l{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.card-h .nm{font-size:15px;font-weight:600;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.card-h .meta{font-size:12.5px;color:var(--ink3)}
+.card-h .r{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.card-h .scbig{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums;min-width:34px;text-align:right}
+.pill{font-size:11px;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.mf-komfortabel{background:var(--good-bg);color:var(--good)}
+.mf-passt{background:var(--warn-bg);color:var(--warn)}
+.mf-eng{background:var(--bad-bg);color:var(--bad)}
+.konf{font-size:11px;padding:1px 7px;border-radius:6px}
+.k-hoch{background:var(--good-bg);color:var(--good)}
+.k-mittel{background:var(--warn-bg);color:var(--warn)}
+.card-body{padding:0 16px 16px;border-top:1px solid var(--line);display:none}
+.card.open .card-body{display:block}
+.sw{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0}
+@media (max-width:640px){.sw{grid-template-columns:1fr}}
+.sw h4{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3);margin:0 0 6px}
+.sw ul{margin:0;padding-left:18px}.sw li{margin-bottom:3px;font-size:13px}
+.specgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px 16px;margin:12px 0;font-size:13px}
+.specgrid .s{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dotted var(--line);padding-bottom:3px}
+.specgrid .s .k{color:var(--ink3)}.specgrid .s .v{font-weight:600;text-align:right}
+.hinweise{background:var(--warn-bg);border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--ink);margin:8px 0}
+.hinweise b{color:var(--warn)}
+.buy{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:var(--surface2);color:var(--ink2);border:1px solid var(--line2);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;margin-top:6px}
+.qz{font-size:12px;color:var(--ink3);margin-top:10px}.qz a{color:var(--accent)}
+.budget{background:var(--surface);border:1px dashed var(--line2);border-radius:var(--radius);padding:14px 16px;margin-top:12px}
+.budget table{min-width:auto}
+.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink3);line-height:1.7}
+.foot b{color:var(--ink2);font-weight:600}
+svg text{font-family:inherit}
+.hint{font-size:12.5px;color:var(--ink3);margin:2px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="egg" style="cursor:pointer" title="⛺">Zelt-Kaufberater</h1>
+  <div id="eggMsg" style="display:none;background:var(--good-bg);color:var(--good);border-radius:10px;padding:10px 14px;font-size:13px;margin:6px 0 2px">⛺ Wandergruppen-approved · Berg heil! 🥾 &nbsp;—&nbsp; und Axel: diesmal das Zelt <b>richtig rum</b> aufbauen, dann läuft dir das Wasser nicht drunter. 😉</div>
+  <p class="sub">Nur verifizierte, dauerhafte Eigenschaften (Preis &amp; Verfügbarkeit bewusst raus). Regler = deine Gewichtung · Punkte = gewichteter Schnitt der 7 Noten · Matten-Check = passen 2× 65-cm-Matten am Fußende?</p>
+
+  <div class="grid2">
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px">
+        <b style="font-size:14px">Deine Gewichtung</b>
+        <button id="reset" style="padding:5px 12px">Zurücksetzen</button>
+      </div>
+      <div id="sliders"></div>
+    </div>
+    <div class="panel">
+      <b style="font-size:14px;display:block;margin-bottom:12px">Filter</b>
+      <div class="filters">
+        <div class="filt" style="min-width:120px">Typ
+          <select id="fTyp"><option value="0">alle</option><option value="3">nur 3-Personen</option><option value="2">nur 2-Personen</option></select></div>
+        <div class="filt" style="min-width:150px">Matten-Check (2× 65 cm)
+          <select id="fMatte"><option value="0">alle</option><option value="passt">mind. „passt"</option><option value="komfortabel">nur „komfortabel"</option></select></div>
+        <div class="filt">Max. Gewicht <span class="val" id="fKgV"></span>
+          <input type="range" id="fKg" min="0.9" max="3.2" step="0.1" value="3.2"></div>
+        <div class="filt">Min. Länge (für deine Größe) <span class="val" id="fLenV"></span>
+          <input type="range" id="fLen" min="200" max="235" step="5" value="215"></div>
+        <div class="filt">Min. Höhe <span class="val" id="fHoeheV"></span>
+          <input type="range" id="fHoehe" min="90" max="135" step="5" value="90"></div>
+        <label class="chk"><input type="checkbox" id="fFrei"> nur freistehend</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><div class="k">Zelte im Vergleich</div><div class="v" id="mTotal"></div></div>
+    <div class="metric"><div class="k">nach Filter</div><div class="v" id="mFilt"></div></div>
+    <div class="metric"><div class="k">Sieger (deine Gewichtung)</div><div class="v" id="mTop" style="font-size:14px"></div></div>
+    <div class="metric"><div class="k">bester €/Punkt</div><div class="v" id="mRob" style="font-size:14px"></div></div>
+  </div>
+
+  <h2>Rangliste</h2>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--good)"></span>Top-Empfehlung</span>
+    <span><span class="dot" style="background:var(--accent)"></span>3-Personen</span>
+    <span><span class="dot" style="background:var(--ink3)"></span>2-Personen (kompakt)</span>
+    <span><span class="dot" style="background:var(--bad)"></span>Haltbarkeits-Falle</span>
+  </div>
+  <div id="ranking"></div>
+  <p class="hint">Klick auf einen Namen öffnet die Detailkarte (Maße, Preis, Nutzer-Kontra, Links). Das × schließt ein Zelt aus.</p>
+
+  <h2>Haltbarkeit gegen Gewicht — der echte Zielkonflikt</h2>
+  <p class="sub">Oben = robuster, links = leichter. Das ideale Feld ist oben-links (robust <i>und</i> leicht) — dünn besiedelt. Preis spielt hier bewusst keine Rolle.</p>
+  <div id="scatter"></div>
+
+  <h2>Alle Daten (verifiziert)</h2>
+  <div class="tblwrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+  <p class="hint">Spaltenkopf klicken = sortieren. „k.A." = herstellerseitig nicht publiziert (nicht geschätzt).</p>
+
+  <h2>Detailkarten</h2>
+  <div id="cards"></div>
+
+  <h2>Budget-Zelte (Amazon) — nicht verifizierbar</h2>
+  <div class="budget">
+    <p style="font-size:13px;margin:0 0 10px;color:var(--ink2)"><b style="color:var(--warn)">⚠ Bewusst nicht gerankt.</b> Für diese Marken existieren <b>keine unabhängigen Tests</b> — nur Affiliate-/Amazon-Quellen mit Verkaufsinteresse. Zahlen unten sind Herstellerangaben, nicht überprüfbar. Sie widersprechen zudem der Priorität „Haltbarkeit zuerst" (dokumentierte Schwächen bei Zippern/Dichtigkeit).</p>
+    <div class="tblwrap"><table style="min-width:auto">
+      <thead><tr><th>Zelt</th><th class="num">Gewicht</th><th>Wassersäule (Angabe)</th><th>Ruf / Notiz</th></tr></thead>
+      <tbody>
+        <tr><td>Naturehike (2P)</td><td class="num">2100 g</td><td>k.A. gesichert</td><td>Bester der vier; Kritik: undicht bei Regen + billige Reißverschlüsse</td></tr>
+        <tr><td>Terra Hiker (2P)</td><td class="num">2100 g</td><td>4000 mm</td><td>Footprint dabei, 2 Eingänge; keine Langzeit-Belege</td></tr>
+        <tr><td>Bessport (2P)</td><td class="num">2350 g</td><td>3000 / 5000 mm</td><td>Budget-Allrounder, Daten nur Marketing</td></tr>
+        <tr><td>Forceatt (2P)</td><td class="num">2500 g</td><td>3000 mm</td><td>ordentlich Platz, stabil; keine unabhängigen Tests</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+var CRIT=[
+ {k:'halt',label:'Material & Haltbarkeit',def:10},
+ {k:'kond',label:'Kondensation & Belüftung',def:7},
+ {k:'wetter',label:'Wetterschutz',def:6},
+ {k:'innen',label:'Innenraum für 2',def:6},
+ {k:'gewicht',label:'Gewicht',def:5},
+ {k:'aufbau',label:'Aufbauprinzip',def:3}
+];
+var EX={};
+var PREIS={
+ 'Exped Lyra III':{p:320,u:'https://geizhals.de/exped-lyra-iii-kuppelzelt-7640445450638-a2560337.html'},
+ 'Wechsel Charger 3':{p:290,u:'https://geizhals.de/?fs=wechsel+charger+3',note:'Fachhändler, nicht im Preisvergleich gelistet'},
+ 'Marmot Tungsten 3P':{p:263,u:'https://geizhals.de/marmot-tungsten-3-kuppelzelt-a1295579.html'},
+ 'Nemo Dagger OSMO 3P':{p:509,u:'https://geizhals.de/nemo-dagger-osmo-3p-kuppelzelt-a3015613.html'},
+ 'MSR Hubba Hubba 3 (LT)':{p:515,u:'https://geizhals.de/msr-hubba-hubba-lt-kuppelzelt-14308-a3783997.html'},
+ 'Vaude Taurus 3P':{p:246,u:'https://geizhals.de/vaude-taurus-3p-kuppelzelt-a1242382.html'},
+ 'Hilleberg Nallo 3':{p:1130,u:'https://geizhals.de/hilleberg-nallo-3-tunnelzelt-v80177.html'},
+ 'Tatonka Narvik 3':{p:336,u:'https://geizhals.de/tatonka-narvik-3-tunnelzelt-2551-a269145.html'},
+ 'Exped Lyra II':{p:399,u:'https://geizhals.de/exped-lyra-ii-kuppelzelt-a2303139.html'}
+};
+var FOOT={
+ 'Exped Lyra III':'Optional (Boden 5.000 mm ist robust). Original „Lyra III Footprint" ~55 € (deckt auch die Apsiden ab, Verfügbarkeit schwankt). Günstig: Tyvek-Zuschnitt ~15–20 €.',
+ 'Wechsel Charger 3':'Am ehesten verzichtbar (Boden 7.000 mm). Original „Groundsheet Charger 3" 59,90 € (direkt bei Wechsel). Günstig: Tyvek-Zuschnitt ~15–20 €.'
+};
+
+var Z=[
+ {n:'Exped Lyra III',marke:'Exped (CH)',pers:3,kg:2300,liegeL:215,bKopf:160,bFuss:160,hoehe:115,tueren:2,apsiden:2,flyD:'68D Polyester',bodenD:'68D Polyester',flyWS:3000,bodenWS:5000,season:'3',frei:true,gar:'Exped 5 Jahre + Reparatur',konf:'hoch',tag:'pick',
+  s:{halt:8,kond:7.5,wetter:8,innen:8.5,gewicht:7,aufbau:10,pack:6.5},
+  pro:['160 cm durchgehend rechteckig — 2× 65 cm + Gepäck über die volle Länge','68D-Polyester robust, Boden 5.000 mm, freistehend','2 Türen/2 Apsiden, 115 cm hoch, leicht (2,1 kg)'],
+  con:['Länge 215 cm — deine akzeptierte Untergrenze','Fly 3.000 mm solide, aber kein Top-Wert (siehe Wechsel Charger 3)'],
+  hinw:[],
+  quelle:{u:'https://www.exped.com/en/products/tents-and-tarps/lyra-iii',l:'Exped + 3 Quellen (verifiziert)'}},
+
+ {n:'Wechsel Charger 3',marke:'Wechsel (DE)',pers:3,kg:2960,liegeL:220,bKopf:170,bFuss:170,hoehe:110,tueren:2,apsiden:2,flyD:'68D Polyester',bodenD:'75D Polyester',flyWS:5000,bodenWS:7000,season:'3',frei:true,gar:'Wechsel Gewährleistung + Reparatur/Ersatzteile',konf:'hoch',tag:'',
+  s:{halt:8,kond:7,wetter:9,innen:9,gewicht:3.5,aufbau:9,pack:5},
+  pro:['170 cm breit rechteckig, 220 cm lang — breiter + länger als der Lyra','5.000 mm Fly / 7.000 mm Boden — Top-Regendichtigkeit (behebt Lyras Schwäche)','Freistehender Geodät, windstabil, 2 Türen/2 Apsiden'],
+  con:['~0,85 kg schwerer als der Lyra (2,96 kg)','Enge Apsiden — wenig Gepäck-Stauraum'],
+  hinw:[],
+  quelle:{u:'https://www.wechsel-tents.de/en/Charger-3/231009',l:'Wechsel (offiziell)'}},
+
+ {n:'Marmot Tungsten 3P',marke:'Marmot (US)',pers:3,kg:2700,liegeL:229,bKopf:168,bFuss:168,hoehe:117,tueren:2,apsiden:2,flyD:'68D Polyester',bodenD:'68D Nylon',flyWS:1200,bodenWS:2000,season:'3',frei:true,gar:'Marmot begrenzt lebenslang',konf:'hoch',tag:'',
+  s:{halt:6.5,kond:7.5,wetter:5.5,innen:9,gewicht:5.5,aufbau:10,pack:5},
+  pro:['229 cm lang + 117 cm hoch — länger UND höher als der Lyra','68D, 2 Türen/2 Apsiden, freistehend, nur 2,7 kg'],
+  con:['Wassersäule schwach (Fly 1.200 / Boden 2.000 mm) — Nähte sickern bei Starkregen','Gestänge verdreht sich bei sehr starkem Wind'],
+  hinw:[],
+  quelle:{u:'https://www.rei.com/product/200301/marmot-tungsten-3p-tent-with-footprint',l:'REI + Nutzerberichte'}},
+
+ {n:'Nemo Dagger OSMO 3P',marke:'Nemo (US)',pers:3,kg:2100,liegeL:229,bKopf:178,bFuss:178,hoehe:108,tueren:2,apsiden:2,flyD:'OSMO (k.A. Denier)',bodenD:'OSMO (k.A. Denier)',flyWS:2000,bodenWS:2000,season:'3',frei:true,gar:'Nemo lebenslang (Adventure Forever)',konf:'hoch',tag:'',
+  s:{halt:6,kond:8,wetter:6.5,innen:9.5,gewicht:8,aufbau:10,pack:7.5},
+  pro:['178 cm rechteckig, 4,1 m² — sehr geräumig, 2 Türen','OSMO-Stoff sackt bei Nässe nicht, leicht (2,1 kg)','Lebenslange Garantie'],
+  con:['Boden nur 2.000 mm — Footprint auf nassem Grund ratsam','Denier herstellerseitig nicht ausgewiesen'],
+  hinw:['Denier = k.A. (OSMO-Mischgewebe, Hersteller listet „0D")'],
+  quelle:{u:'https://www.nemoequipment.com/products/dagger-osmo',l:'Nemo + novo-monde-Test'}},
+
+ {n:'MSR Hubba Hubba 3 (LT)',marke:'MSR (US)',pers:3,kg:2177,liegeL:229,bKopf:191,bFuss:191,hoehe:107,tueren:2,apsiden:2,flyD:'20D Ripstop Nylon',bodenD:'20D Ripstop Nylon',flyWS:1200,bodenWS:1800,season:'3',frei:true,gar:'MSR lebenslang (begrenzt) + Reparatur',konf:'hoch',tag:'',
+  s:{halt:5.5,kond:8.5,wetter:6.5,innen:9.5,gewicht:7.5,aufbau:10,pack:7.5},
+  pro:['~191 cm rechteckig, 4,35 m² — mit Abstand am geräumigsten','Sehr gute Belüftung, 2 Türen, DAC-Gestänge','Leicht (2,18 kg) für ein 3P'],
+  con:['Nur 20D-Material, Boden 1.800 mm — dünner als robuste Klasse','Weniger Reserve bei Dauerregen'],
+  hinw:['Aktuelles Modell = LT 3 (nicht mit älterem NX verwechseln); Maße verifiziert 191×229 cm'],
+  quelle:{u:'https://sectionhiker.com/review-msr-hubba-hubba-hd-2-tent/',l:'MSR + Switchback/Adventure Alan'}},
+
+ {n:'Vaude Taurus 3P',marke:'Vaude (DE)',pers:3,kg:2900,liegeL:230,bKopf:160,bFuss:160,hoehe:95,tueren:1,apsiden:1,flyD:'75D Polyester',bodenD:'70D Polyamid',flyWS:3000,bodenWS:5000,season:'3',frei:true,gar:'Vaude 5 Jahre + starker Ersatzteil-Service',konf:'hoch',tag:'',
+  s:{halt:9,kond:6.5,wetter:8,innen:7,gewicht:4,aufbau:9,pack:5},
+  pro:['160 cm durchgehend rechteckig, größte Grundfläche (3,8 m²)','Robustestes Material: 75D-Fly, 70D-Boden, 3.000/5.000 mm','5 Jahre Garantie + Ersatzteil-Service'],
+  con:['Nur 1 Tür / 1 Apside — Komfort-Nachteil zu zweit','Niedrig (95 cm) und schwer (~2,75–3,1 kg)'],
+  hinw:['Gewicht 2,75 kg minimal / 3,1 kg gepackt (beides korrekt, verifiziert)'],
+  quelle:{u:'https://www.vaude.com/en-NL/Products/Tents/3-Person/Taurus-3P',l:'Vaude + Bergfreunde'}},
+
+ {n:'Tatonka Narvik 3',marke:'Tatonka (DE)',pers:3,kg:3100,liegeL:215,bKopf:165,bFuss:130,hoehe:110,tueren:1,apsiden:1,flyD:'68D Polyester',bodenD:'70D Nylon',flyWS:8000,bodenWS:10000,season:'3',frei:false,gar:'Tatonka Reparaturservice + Ersatzteillager',konf:'hoch',tag:'',
+  s:{halt:8.5,kond:6,wetter:8.5,innen:6.5,gewicht:4.5,aufbau:5,pack:5},
+  pro:['Sehr robust (70D-Boden, 8.000/10.000 mm), sturmfest','Deutscher Reparaturservice + Ersatzteillager','Innen 120 cm hoch (Aussenzelt-Peak)'],
+  con:['Verjüngt auf exakt 130 cm am Fuß — kein Gepäck-Puffer','Nur 1 Eingang, nicht freistehend, schwer (3,1 kg)'],
+  hinw:['Denier verifiziert 68D','Fußbreite ~130 cm geschätzt — Hersteller gibt sie nicht an','Innenhöhe nicht separat ausgewiesen'],
+  quelle:{u:'https://www.tatonka.com/en/product/narvik-3/',l:'Tatonka + testberichte.de'}},
+
+ {n:'Hilleberg Nallo 3',marke:'Hilleberg (SE)',pers:3,kg:2700,liegeL:220,bKopf:160,bFuss:127,hoehe:105,tueren:1,apsiden:1,flyD:'Kerlon 1200 (k.A. Denier)',bodenD:'k.A.',flyWS:null,bodenWS:null,season:'3-4',frei:false,gar:'Hilleberg lebenslang + bezahlbarer Reparaturservice',konf:'hoch',tag:'',
+  s:{halt:10,kond:5.5,wetter:10,innen:5.5,gewicht:6,aufbau:5,pack:8},
+  pro:['Haltbarster im Feld (Kerlon 1200), 3-4-Jahreszeiten','Sturm-/Schneeschutz-Sieger, mit 4 Heringen extrem stabil','Lebenslange Garantie + Reparaturservice'],
+  con:['Verjüngt auf 127 cm am Fuß — zu schmal für zwei 65-cm-Matten','Nur 1 Tür, Kondensneigung im Sommer, nicht freistehend'],
+  hinw:['Wassersäule + Denier herstellerseitig grundsätzlich nicht publiziert (= k.A., kein Datenmangel)'],
+  quelle:{u:'https://hilleberg.com/eng/tent/red-label-tents/nallo-3/',l:'Hilleberg + Trailspace'}},
+
+ {n:'Sea to Summit Telos TR3',marke:'Sea to Summit (AU)',pers:3,kg:2300,liegeL:230,bKopf:181,bFuss:147,hoehe:133,tueren:2,apsiden:2,flyD:'15D Nylon',bodenD:'20D Nylon',flyWS:null,bodenWS:2500,season:'3',frei:true,gar:'Sea to Summit lebenslang gegen Herstellungsfehler',konf:'hoch',tag:'falle',
+  s:{halt:3.5,kond:9.5,wetter:5.5,innen:8.5,gewicht:7.5,aufbau:10,pack:8},
+  pro:['Am höchsten (133 cm), beste Belüftung der Runde','181 cm breit am Kopf, 2 Türen, 3,7 m²'],
+  con:['15D/20D — fragilste Konstruktion, Footprint faktisch Pflicht','Fly sackt bei Nässe durch, berührt Innenzelt → Tropfen'],
+  hinw:['Höhe & Gewicht je Quelle leicht abweichend (2,1 vs. 2,3 kg)','Fly-Wassersäule = k.A.'],
+  quelle:{u:'https://coolofthewild.com/sea-to-summit-telos-tr3-tent-review/',l:'coolofthewild + nailthetrail'}},
+
+ {n:'Big Agnes Copper Spur HV UL3',marke:'Big Agnes (US)',pers:3,kg:1760,liegeL:229,bKopf:173,bFuss:150,hoehe:109,tueren:2,apsiden:2,flyD:'15D Nylon',bodenD:'15–20D Nylon',flyWS:1200,bodenWS:1200,season:'3',frei:true,gar:'Big Agnes lebenslang (begrenzt) + günstige Reparatur',konf:'hoch',tag:'falle',
+  s:{halt:3.5,kond:8,wetter:6,innen:8.5,gewicht:9,aufbau:10,pack:8},
+  pro:['Sehr leicht (~1,6–1,76 kg) für ein 3P, 2 Türen','173 cm breit am Kopf, freistehend'],
+  con:['Sehr dünnes 15–20D-Material, punktionsanfällig (Footprint empfohlen)','Nur 1.200 mm Wassersäule, im Test brachen Gestänge, wenig Guylines'],
+  hinw:['Minimalgewicht Nominal- vs. Messwert abweichend (~1,6 kg)'],
+  quelle:{u:'https://www.outdoorgearlab.com/reviews/camping-and-hiking/backpacking-tent/big-agnes-copper-spur-hv-ul3',l:'OutdoorGearLab'}},
+
+ {n:'Decathlon Forclaz MT900 3P',marke:'Decathlon (FR)',pers:3,kg:2700,liegeL:205,bKopf:185,bFuss:155,hoehe:119,tueren:2,apsiden:3,flyD:'20D Polyester',bodenD:'40D Polyamid',flyWS:2000,bodenWS:3000,season:'3',frei:true,gar:'Decathlon 2 Jahre + eigener Reparaturservice',konf:'hoch',tag:'',
+  s:{halt:5,kond:7,wetter:7,innen:8.5,gewicht:6,aufbau:9,pack:8},
+  pro:['185/155 cm breit + 119 cm hoch — viel Platz für 2 + Gepäck','Im Windkanal bis 65 km/h validiert, getapte Nähte','3 Stauräume, freistehender Dome'],
+  con:['Nur 205 cm lang — knapp für Große','20D/40D Budget-Komponenten, nur 2 Jahre Garantie'],
+  hinw:['Nur 205 cm lang — unter deiner 215-cm-Grenze','gilt für die freistehende Dome-Version'],
+  quelle:{u:'https://www.livefortheoutdoors.com/camping/tents/decathlon-forclaz-trekking-dome-tent-mt900-review/',l:'livefortheoutdoors'}},
+
+ {n:'Durston X-Mid 2',marke:'Durston (CA)',pers:2,kg:975,liegeL:234,bKopf:132,bFuss:132,hoehe:122,tueren:2,apsiden:2,flyD:'15D Silpoly',bodenD:'15D Silnylon',flyWS:3500,bodenWS:3500,season:'3',frei:false,gar:'Durston 2 Jahre + Ersatzteile',konf:'hoch',tag:'',
+  s:{halt:6.5,kond:8,wetter:7.5,innen:7.5,gewicht:10,aufbau:5,pack:10},
+  pro:['Geräumigstes 2P (132×234 cm, 122 cm hoch), 2 Türen','Extrem leicht (~975 g), doppelt vernäht/robust für UL','Silpoly sackt bei Nässe nicht, 3.500 mm'],
+  con:['Nur 2P — 132 cm reichen für Matten, kaum Gepäck innen','Trekkingstock-Zelt (nicht freistehend)'],
+  hinw:[],
+  quelle:{u:'https://durstongear.com/products/x-mid-2-tent-ultralight-backpacking',l:'Durston + Switchback'}},
+
+ {n:'Exped Lyra II',marke:'Exped (CH)',pers:2,kg:2100,liegeL:215,bKopf:130,bFuss:130,hoehe:110,tueren:2,apsiden:2,flyD:'68D Polyester',bodenD:'68D Polyester',flyWS:3000,bodenWS:5000,season:'3',frei:true,gar:'Exped 5 Jahre + Reparatur',konf:'hoch',tag:'',
+  s:{halt:8,kond:7.5,wetter:8,innen:6,gewicht:7.5,aufbau:10,pack:6.5},
+  pro:['Robustes 68D-Polyester, Boden 5.000 mm, freistehend','2 Türen/2 Apsiden, 110 cm hoch, 2,1 kg'],
+  con:['130 cm exakt = zwei 65-cm-Matten randvoll, Gepäck nur in Apsiden','Als 2P für „Gepäck innen" zu eng'],
+  hinw:[],
+  quelle:{u:'https://www.expeduk.com/pages/lyra-ii-specifications',l:'Exped (offiziell)'}},
+
+ {n:'MSR Hubba Hubba HD 2',marke:'MSR (US)',pers:2,kg:1800,liegeL:213,bKopf:127,bFuss:127,hoehe:102,tueren:2,apsiden:2,flyD:'20D Ripstop Nylon',bodenD:'30D Ripstop Nylon',flyWS:3000,bodenWS:6000,season:'3',frei:true,gar:'MSR lebenslang (begrenzt) + Reparatur',konf:'hoch',tag:'',
+  s:{halt:6.5,kond:8,wetter:7.5,innen:5.5,gewicht:9,aufbau:10,pack:7.5},
+  pro:['HD = verstärkt, Boden bis 6.000 mm, sehr leicht (1,8 kg)','Freistehend, 2 Türen, gute Belüftung'],
+  con:['127 cm — zwei 65-cm-Matten überlappen leicht','2P, dünneres Fly (20D)'],
+  hinw:['127 cm — 2 Matten überlappen leicht (Maße verifiziert)'],
+  quelle:{u:'https://cascadedesigns.com/products/hubba-hubba-hd-2-person-backpacking-tent',l:'MSR (offiziell)'}},
+
+ {n:'MSR Elixir 2',marke:'MSR (US)',pers:2,kg:2820,liegeL:213,bKopf:127,bFuss:127,hoehe:104,tueren:2,apsiden:2,flyD:'75D Polyester',bodenD:'75D Polyester',flyWS:1500,bodenWS:3000,season:'3',frei:true,gar:'MSR lebenslang (begrenzt) + Reparatur',konf:'hoch',tag:'',
+  s:{halt:9,kond:7,wetter:7,innen:5.5,gewicht:5,aufbau:9,pack:7},
+  pro:['75D — das dickste, robusteste Material der 2P-Klasse','Footprint inklusive, sturmstabile Gestänge'],
+  con:['127 cm (Matten überlappen), 2P','Schwer (~2,82 kg Packgewicht), niedrige Fly-Wassersäule (1.500 mm)'],
+  hinw:[],
+  quelle:{u:'https://www.outdoorgearlab.com/reviews/camping-and-hiking/budget-backpacking-tent/msr-elixir-2',l:'OutdoorGearLab'}}
+];
+
+var NK={
+ 'Exped Lyra III':{k:['Heringe verbiegen leicht — auf steinig-alpinem Grund bessere separat kaufen','Beim Aussteigen bei Regen kann es ins Innenzelt tropfen (Apside nicht weit vorgezogen)','Y-Gestänge-Verbindung vereinzelt gebrochen (Ersatzhülse liegt bei)','Mit 3 Personen spürbar Kondens — Belüftung mäßig'],yt:null,q:'aventurenordique / Great Walks / Bergfreunde-Nutzer'},
+ 'Wechsel Charger 3':{k:['Enge Apsiden — wenig Gepäck-Stauraum','Fixierungs-Pins können sich verbiegen','Innenzelt-Nähte teils mäßig verarbeitet','Schwer (2,96 kg)'],yt:null,q:'Nutzerberichte / Foren'},
+ 'Marmot Tungsten 3P':{k:['Fly-Nähte sickern bei Starkregen (nur 1.200 mm Wassersäule)','Gestänge verdreht sich bei sehr starkem Wind'],yt:null,q:'REI-Nutzer / Reddit'},
+ 'Nemo Dagger OSMO 3P':{k:['Unterer Reißverschluss klemmt oft, feines Mesh verhakt sich (zwei Hände nötig)','„Jake-Feet"-Fly-Clips können mit der Zeit brüchig werden (Ersatzteile separat)','Boden nur 2.000 mm + Kondens bei 3 Personen — Footprint empfohlen','Real eher großzügiges 2P als echtes 3P'],yt:'https://www.youtube.com/watch?v=wEO7EpeDDgQ',q:'redditrecs / novo-monde / BackpackingLight'},
+ 'MSR Hubba Hubba 3 (LT)':{k:['Fly endet ~5 cm über dem Boden — Regen spritzt oben an die Innenwand','Naht-Undichtigkeit gemeldet (MSR bot 2019 kostenloses Nachsealing an)','20D-Stoff dünn; ältere Gestänge-Chargen splitterten (von MSR ersetzt)'],yt:'https://www.youtube.com/watch?v=7FvhFls-01U',q:'BackpackingLight / Better Trail / UKC-Forum'},
+ 'Vaude Taurus 3P':{k:['Innenzelt hängt hinten durch (nur vorne verspannt) — weniger nutzbarer Platz','Nur 6 Heringe bei 5 Abspannleinen; Fly schwer straff zu spannen','Für 3 zu eng (140 cm am Fuß) — real ein großzügiges 2P','Dünner Boden — Footprint empfohlen'],yt:null,q:'Bergfreunde-Nutzer / livefortheoutdoors / testberichte.de'},
+ 'Tatonka Narvik 3':{k:['Sehr schwer (3+ kg), Packmaß füllt eine 50-L-Rolle zu 2/3','Kondens tropft nachts bei Windstille/Kälte ins Innenzelt','„3P" unrealistisch — real 2P+Gepäck; Außenschläfer berührt am schmalen Fuß die nasse Wand','Hakeliger Gestänge-Ab-/Aufbau'],yt:'https://www.youtube.com/watch?v=IpzJXsagXKU',q:'motorrad-tour-online / outdoorseiten.net / Bergfreunde'},
+ 'Hilleberg Nallo 3':{k:['Starke Kondensation — tropft morgens auf Ausrüstung/Schlafsack','Sauna-Effekt in warm-feucht (Tunnel, kaum Querlüftung)','Engegefühl + angewinkeltes Fußende (Nässe am Schlafsack am schmalen Ende)'],yt:'https://www.youtube.com/watch?v=vM0uVfuBFPQ',q:'outdoorseiten.net-Forum (365+ Nächte)'},
+ 'Sea to Summit Telos TR3':{k:['Fly sackt bei Nässe durch, berührt Innen-Mesh → Tropfen; Wasser sammelt sich auf dem Dachlüfter','Dünner 15D-Boden reißt auf Steinen (Footprint Pflicht), Gestänge-Knoten verbiegen leicht','1-Stern-Kunde: Stangenbruch + Wandriss im Sturm (nicht von Garantie gedeckt)','Für 3 mit Matten zu eng'],yt:null,q:'coolofthewild / gonecampingagain / Bergfreunde-Kunde / SectionHiker'},
+ 'Big Agnes Copper Spur HV UL3':{k:['Sehr dünnes 15–20D-Nylon — reißt/locht leicht, Footprint faktisch Pflicht','Leichte Reißverschlüsse haken am Stoff/Mesh, Slider-Ausfälle gemeldet (einschicken)','Fly sackt bei Nässe durch + wenig Abspannleinen — schwach bei starkem Wind','Boden nur 1.200 mm'],yt:'https://www.youtube.com/watch?v=lnx-Hl_mnU4',q:'CleverHiker / Backcountry-Post-Forum'},
+ 'Decathlon Forclaz MT900 3P':{k:['Innenraum eng + stark abfallende Ecken — für >1,90 m ungeeignet (nur 205 cm lang)','Steile hohe Wände fangen Wind — Stabilität bei echtem Sturm bezweifelt','Dünner Boden/Stoff + billige Hardware (Zipper delicate) — Footprint faktisch Pflicht','Nur >2.000 mm Fly-Wassersäule (Papierwert)'],yt:'https://www.youtube.com/watch?v=K4yq-2sEhCE',q:'livefortheoutdoors / der-eskapist.de / YouTube-Feldtest'},
+ 'Durston X-Mid 2':{k:['Bei hoher Luftfeuchte reichen die Top-Vents nicht — Kondens/nasser Schlafsack','Große Flächen fangen Wind — laut/flatternd im Sturm','Nicht freistehend + dünnes 15D-Material; Zipper-Verschleiß ab ~1.200 Meilen'],yt:'https://www.youtube.com/watch?v=mUbJUPn1EyE',q:'redditrecs r/Ultralight'},
+ 'Exped Lyra II':{k:['Apsiden schwer straff zu spannen — leichter Durchhang','Mitgelieferte Plastik-Heringe schwach (Nutzer tauschen sie)','Lüfter-Velcro verdreht den Spalt (öffnet schräg zum Himmel)'],yt:'https://www.youtube.com/watch?v=M_bf8WIIY5Q',q:'Great Walks / Walkhighlands-Forum'},
+ 'MSR Hubba Hubba HD 2':{k:['Ältere Gen: Gestänge splitterten (Charge, von MSR ersetzt)','LT-Variante 20D zu dünn — HD ist die robustere Antwort, aber teurer','Windperformance in starken Böen als Schwäche gelistet'],yt:'https://www.youtube.com/watch?v=IfOs3DIgddI',q:'BackpackingLight / redditrecs'},
+ 'MSR Elixir 2':{k:['Von Böen umgeworfen, stand danach nicht mehr richtig; Schnee weht unters Außenzelt','Schwer/klobig — fürs Gewicht kritisiert','Manche Nutzer: „zahlt v.a. den Markennamen"'],yt:'https://www.youtube.com/watch?v=SMjysHLnzqk',q:'redditrecs / campedtoohard'}
+};
+function tagColor(m){if(m.tag==='pick')return 'var(--good)';if(m.tag==='falle')return 'var(--bad)';return m.pers===3?'var(--accent)':'var(--ink3)'}
+function mattenFit(m){return m.bFuss>=150?'komfortabel':(m.bFuss>=130?'passt':'eng')}
+var $=function(id){return document.getElementById(id)};
+
+var slBox=$('sliders');
+CRIT.forEach(function(c){
+  var r=document.createElement('div');r.className='ctrlrow';
+  r.innerHTML='<label>'+c.label+'</label><input type="range" id="s_'+c.k+'" min="0" max="10" step="1" value="'+c.def+'"><span class="val" id="o_'+c.k+'"></span>';
+  slBox.appendChild(r);r.querySelector('input').addEventListener('input',render);
+});
+$('reset').addEventListener('click',function(){CRIT.forEach(function(c){$('s_'+c.k).value=c.def});render()});
+$('egg').addEventListener('click',function(){var e=$('eggMsg');e.style.display=e.style.display==='none'?'block':'none'});
+['fTyp','fMatte','fKg','fLen','fHoehe','fFrei'].forEach(function(id){$(id).addEventListener('input',render)});
+
+function weights(){var w={},sum=0;CRIT.forEach(function(c){var v=+$('s_'+c.k).value;w[c.k]=v;sum+=v});if(sum===0){CRIT.forEach(function(c){w[c.k]=1});sum=CRIT.length}return {w:w,sum:sum}}
+function score(m,w,sum){var t=0;CRIT.forEach(function(c){t+=m.s[c.k]*w[c.k]});return t/sum*10}
+
+var sortKey='sc',sortDir=-1;
+
+function passes(m){
+  if(m.konf!=='hoch')return false;
+  if(EX[m.n])return false;
+  var t=$('fTyp').value; if(t==='3'&&m.pers!==3)return false; if(t==='2'&&m.pers!==2)return false;
+  var mf=$('fMatte').value; var f=mattenFit(m);
+  if(mf==='komfortabel'&&f!=='komfortabel')return false;
+  if(mf==='passt'&&f==='eng')return false;
+  if(m.kg/1000> +$('fKg').value+0.001)return false;
+  if(m.liegeL< +$('fLen').value)return false;
+  if(m.hoehe< +$('fHoehe').value)return false;
+  if($('fFrei').checked&&!m.frei)return false;
+  return true;
+}
+
+function render(){
+  var ws=weights(),w=ws.w,sum=ws.sum;
+  CRIT.forEach(function(c){$('o_'+c.k).textContent=Math.round(w[c.k]/sum*100)+'%'});
+  $('fKgV').textContent=(+$('fKg').value).toFixed(1)+' kg';
+  $('fLenV').textContent=(+$('fLen').value>200?(+$('fLen').value)+' cm':'aus');
+  $('fHoeheV').textContent=(+$('fHoehe').value>90?(+$('fHoehe').value)+' cm':'aus');
+  var all=Z.map(function(m){return Object.assign({},m,{sc:score(m,w,sum)})});
+  var vis=all.filter(passes);
+  $('mTotal').textContent=Z.length;
+  $('mFilt').textContent=vis.length;
+  var byScore=vis.slice().sort(function(a,b){return b.sc-a.sc});
+  var byRob=vis.slice().sort(function(a,b){return b.s.halt-a.s.halt});
+  $('mTop').innerHTML=byScore.length?byScore[0].n+' <small>('+Math.round(byScore[0].sc)+')</small>':'—';
+  var byPL=vis.filter(function(m){return PREIS[m.n]}).map(function(m){return {n:m.n,pl:PREIS[m.n].p/m.sc}}).sort(function(a,b){return a.pl-b.pl});
+  $('mRob').innerHTML=byPL.length?byPL[0].n+' <small>('+byPL[0].pl.toFixed(1)+' €/P)</small>':'—';
+  var maxSc=byScore.length?byScore[0].sc:100;
+  var exN=Object.keys(EX).length;
+  var exLine=exN?'<div style="font-size:12px;color:var(--ink3);margin-bottom:8px">'+exN+' ausgeschlossen · <a href="#" onclick="resetEx();return false" style="color:var(--accent)">zurücksetzen</a></div>':'';
+  $('ranking').innerHTML=exLine+(byScore.map(function(m,i){
+    var badge=m.tag==='pick'?'<span class="tags t-pick">Top</span>':(m.tag==='falle'?'<span class="tags t-falle">Falle</span>':(m.pers===3?'<span class="tags t-3p">3P</span>':''));
+    var nm=m.n.replace(/'/g,"\\'");
+    return '<div class="rankrow"><span class="rn">'+(i+1)+'</span>'+
+      '<span class="nm" onclick="openCard(\''+nm+'\')">'+m.n+badge+'</span>'+
+      '<div class="track"><div class="bar" style="width:'+Math.round(m.sc/maxSc*100)+'%;background:'+tagColor(m)+'"></div></div>'+
+      '<span class="sc">'+Math.round(m.sc)+'</span>'+
+      '<span class="ex" title="Zelt ausschließen" onclick="excludeTent(\''+nm+'\')">×</span></div>';
+  }).join('')||'<p class="hint">Keine Zelte passen zu den Filtern.</p>');
+  renderScatter(vis);
+  renderTable(vis);
+  renderCards(byScore);
+  renderFoot();
+}
+
+function renderScatter(vis){
+  var W=660,H=360,x0=70,x1=636,y0=272,y1=28;
+  function xs(kg){return x0+(kg-0.8)/(3.3-0.8)*(x1-x0)}
+  function ys(h){return y0-(h-2)/(10-2)*(y0-y1)}
+  var g='';
+  [2,4,6,8,10].forEach(function(h){var y=ys(h);g+='<line x1="'+x0+'" y1="'+y+'" x2="'+x1+'" y2="'+y+'" stroke="var(--line)"/><text x="'+(x0-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="var(--ink3)">'+h+'</text>'});
+  [1,1.5,2,2.5,3].forEach(function(kg){var x=xs(kg);g+='<text x="'+x+'" y="'+(y0+18)+'" text-anchor="middle" font-size="11" fill="var(--ink3)">'+kg.toFixed(1)+'kg</text>'});
+  g+='<line x1="'+x0+'" y1="'+y0+'" x2="'+x1+'" y2="'+y0+'" stroke="var(--line2)"/><line x1="'+x0+'" y1="'+y0+'" x2="'+x0+'" y2="'+y1+'" stroke="var(--line2)"/>';
+  g+='<text x="'+((x0+x1)/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="12" fill="var(--ink2)">Gewicht (Packgewicht, kg — verifiziert)</text>';
+  g+='<text transform="translate(16,'+((y0+y1)/2)+') rotate(-90)" text-anchor="middle" font-size="12" fill="var(--ink2)">Haltbarkeit (Einordnung aus Material + Tests)</text>';
+  vis.forEach(function(m){
+    var x=xs(m.kg/1000),y=ys(m.s.halt),r=m.tag==='pick'?7:5;
+    g+='<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+tagColor(m)+'"><title>'+m.n+': Haltbarkeit '+m.s.halt+'/10, '+(m.kg/1000).toFixed(2)+' kg</title></circle>';
+    var lab=m.n.replace('Hilleberg ','').replace('Tatonka ','').replace('Big Agnes ','').replace('Sea to Summit ','').replace('Decathlon Forclaz ','').replace('MSR ','').replace('Exped ','').replace('Vaude ','').replace('Durston ','').replace('Nemo ','');
+    var left=m.kg/1000>2.5;
+    g+='<text x="'+(left?x-9:x+9)+'" y="'+(y+3.5)+'" text-anchor="'+(left?'end':'start')+'" font-size="10" fill="var(--ink2)">'+lab+'</text>';
+  });
+  $('scatter').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Haltbarkeit gegen Gewicht">'+g+'</svg>';
+}
+
+var COLS=[
+ {k:'n',t:'Modell'},{k:'sc',t:'Punkte',num:true},{k:'preis',t:'Richtpreis',num:true},{k:'pers',t:'Pers',num:true},
+ {k:'mf',t:'Matten-Check'},{k:'kg',t:'Gewicht',num:true},{k:'bFuss',t:'Breite Fuß',num:true},{k:'liegeL',t:'Länge',num:true},
+ {k:'hoehe',t:'Höhe',num:true},{k:'tueren',t:'Türen',num:true},{k:'bodenWS',t:'Boden mm',num:true},{k:'bodenD',t:'Boden-Material'},{k:'season',t:'Saison'},{k:'frei',t:'Freisteh.'}
+];
+function fmt(m,k){
+  if(k==='sc')return Math.round(m.sc);
+  if(k==='konf')return m.konf;
+  if(k==='mf')return mattenFit(m);
+  if(k==='kg')return (m.kg/1000).toFixed(2)+' kg';
+  if(k==='bFuss')return (m.bKopf===m.bFuss?m.bFuss:m.bKopf+'/'+m.bFuss)+' cm';
+  if(k==='liegeL')return m.liegeL+' cm';
+  if(k==='hoehe')return m.hoehe+' cm';
+  if(k==='bodenWS')return m.bodenWS===null?'k.A.':m.bodenWS;
+  if(k==='frei')return m.frei?'ja':'nein';
+  if(k==='preis'){var pr=PREIS[m.n];return pr?'~'+pr.p+' €':'—'}
+  return m[k];
+}
+function renderTable(vis){
+  var head='<tr>'+COLS.map(function(c){var ar=sortKey===c.k?(sortDir<0?' ↓':' ↑'):'';return '<th class="'+(c.num?'num':'')+'" onclick="setSort(\''+c.k+'\')">'+c.t+ar+'</th>'}).join('')+'</tr>';
+  $('tbl').tHead.innerHTML=head;
+  var rows=vis.slice().sort(function(a,b){
+    var va=sortKey==='sc'?a.sc:(sortKey==='mf'?a.bFuss:(sortKey==='preis'?(PREIS[a.n]?PREIS[a.n].p:999999):a[sortKey]));
+    var vb=sortKey==='sc'?b.sc:(sortKey==='mf'?b.bFuss:(sortKey==='preis'?(PREIS[b.n]?PREIS[b.n].p:999999):b[sortKey]));
+    if(va===null)va=-1;if(vb===null)vb=-1;
+    if(typeof va==='string'&&typeof vb==='string')return sortDir*va.localeCompare(vb);
+    return sortDir*((va>vb?1:va<vb?-1:0));
+  });
+  $('tbl').tBodies[0].innerHTML=rows.map(function(m){
+    return '<tr class="'+(m.tag==='falle'?'falle':'')+'">'+COLS.map(function(c){return '<td class="'+(c.num?'num':'')+'">'+fmt(m,c.k)+'</td>'}).join('')+'</tr>';
+  }).join('');
+}
+function setSort(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=(k==='n'||k==='konf'||k==='mf'||k==='bodenD'||k==='season'||k==='frei')?1:-1}render()}
+
+function renderCards(list){
+  var ws=weights(),wC=ws.w,sumC=ws.sum;
+  $('cards').innerHTML=list.map(function(m){
+    var id='card_'+m.n.replace(/[^a-zA-Z0-9]/g,'');
+    var badge=m.tag==='pick'?'<span class="tags t-pick">Top-Empfehlung</span>':(m.tag==='falle'?'<span class="tags t-falle">Haltbarkeits-Falle</span>':(m.pers===3?'<span class="tags t-3p">3-Personen</span>':'<span class="tags" style="background:var(--surface2);color:var(--ink2)">2-Personen</span>'));
+    var mf=mattenFit(m);
+    var specs=[
+      ['Liegefläche',m.liegeL+' × '+(m.bKopf===m.bFuss?m.bKopf:m.bKopf+' (Kopf) / '+m.bFuss+' (Fuß)')+' cm'],
+      ['Innenhöhe',m.hoehe+' cm'],
+      ['Matten-Check (2× 65 cm)',mf+' (Fuß '+m.bFuss+' cm)'],
+      ['Türen / Apsiden',m.tueren+' / '+m.apsiden],
+      ['Gewicht (Pack)',(m.kg/1000).toFixed(2)+' kg · zu zweit '+(m.kg/2000).toFixed(2)+' kg p.P.'],
+      ['Material Fly / Boden',m.flyD+' / '+m.bodenD],
+      ['Wassersäule Fly / Boden',(m.flyWS===null?'k.A.':m.flyWS+' mm')+' / '+(m.bodenWS===null?'k.A.':m.bodenWS+' mm')],
+      ['Jahreszeiten',m.season],
+      ['Aufbau',m.frei?'freistehend':'abgespannt'],
+      ['Garantie',m.gar],
+      ['Richtpreis (Geizhals, 05.07.)',(PREIS[m.n]?'~'+PREIS[m.n].p+' € · '+(PREIS[m.n].p/m.sc).toFixed(1)+' €/Punkt'+(PREIS[m.n].note?' — '+PREIS[m.n].note:''):'nicht im Preisvergleich gelistet')]
+    ];
+    var fp=FOOT[m.n]?'<div class="hinweise" style="background:var(--accent-bg)"><b style="color:var(--accent)">Unterboden (Footprint):</b> '+FOOT[m.n]+'</div>':'';
+    var hinw=m.hinw&&m.hinw.length?'<div class="hinweise"><b>Datenqualität:</b> '+m.hinw.join(' · ')+'</div>':'';
+    var nk=NK[m.n]||{k:[],yt:null,q:''};
+    var kontra=nk.k.length?'<div class="hinweise" style="background:var(--bad-bg)"><b style="color:var(--bad)">Nutzer-Kontra ('+nk.q+'):</b><ul style="margin:6px 0 0;padding-left:18px">'+nk.k.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div>':'';
+    var ytLink=nk.yt?('<a class="buy" href="'+nk.yt+'" target="_blank" rel="noopener">YouTube-Review ↗</a>'):('<a class="buy" href="https://www.youtube.com/results?search_query='+encodeURIComponent(m.n+' tent review')+'" target="_blank" rel="noopener">YouTube-Suche ↗</a>');
+    var links='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"><a class="buy" href="https://www.idealo.de/preisvergleich/MainSearchProductCategory.html?q='+encodeURIComponent(m.n)+'" target="_blank" rel="noopener">Preisvergleich Idealo ↗</a><a class="buy" href="https://geizhals.de/?fs='+encodeURIComponent(m.n)+'" target="_blank" rel="noopener">Geizhals ↗</a>'+ytLink+'</div>';
+    var wsumH=0;var herleitung='<details style="margin-top:10px"><summary style="cursor:pointer;font-size:13px;color:var(--ink2)">Punkte-Herleitung anzeigen</summary><table style="width:100%;font-size:12.5px;margin-top:8px;border-collapse:collapse;min-width:auto">'+CRIT.map(function(c){var anteil=wC[c.k]/sumC;var beitrag=m.s[c.k]*anteil;wsumH+=beitrag;return '<tr><td style="padding:2px 0;color:var(--ink2);border:none">'+c.label+'</td><td class="num" style="padding:2px 6px;border:none">Note '+m.s[c.k].toFixed(1)+'</td><td class="num" style="padding:2px 6px;color:var(--ink3);border:none">× '+Math.round(anteil*100)+'%</td><td class="num" style="padding:2px 0;font-weight:600;border:none">= '+beitrag.toFixed(2)+'</td></tr>'}).join('')+'<tr><td colspan="3" style="padding:6px 0 0;text-align:right;color:var(--ink2);border:none">gewichteter Schnitt (0–10)</td><td class="num" style="padding:6px 0 0;font-weight:600;border:none">'+wsumH.toFixed(2)+'</td></tr><tr><td colspan="3" style="padding:2px 0 0;text-align:right;font-weight:600;border:none">× 10 = Gesamtpunkte</td><td class="num" style="padding:2px 0 0;font-weight:600;border:none">'+Math.round(m.sc)+'</td></tr></table><div style="font-size:12px;color:var(--ink3);margin-top:6px">Jede Eigenschaft: Note 0–10 (aus verifizierten Daten + Tests) × dein Gewicht = Beitrag. Summe der Beiträge = gewichteter Schnitt, ×10 = Gesamtpunkte.</div></details>';
+    return '<div class="card '+(m.tag==='pick'?'pick':'')+'" id="'+id+'">'+
+      '<div class="card-h" onclick="this.parentNode.classList.toggle(\'open\')">'+
+        '<div class="l"><span class="nm">'+m.n+badge+'</span><span class="meta">'+m.marke+' · '+m.pers+' Pers.</span></div>'+
+        '<div class="r"><span class="pill mf-'+mf+'">Matten: '+mf+'</span><span class="scbig">'+Math.round(m.sc)+'</span></div>'+
+      '</div>'+
+      '<div class="card-body">'+
+        '<div class="sw"><div><h4>Stärken</h4><ul>'+m.pro.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div>'+
+        '<div><h4>Schwächen</h4><ul>'+m.con.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div></div>'+
+        '<div class="specgrid">'+specs.map(function(s){return '<div class="s"><span class="k">'+s[0]+'</span><span class="v">'+s[1]+'</span></div>'}).join('')+'</div>'+
+        fp+herleitung+hinw+kontra+links+
+        '<div class="qz">Fakten-Quelle (interessenskonflikt-arm): <a href="'+m.quelle.u+'" target="_blank" rel="noopener">'+m.quelle.l+'</a></div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+function openCard(name){var id='card_'+name.replace(/[^a-zA-Z0-9]/g,'');var el=$(id);if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'center'})}}
+
+function renderFoot(){
+  $('foot').innerHTML='<b>Methodik &amp; Datenqualität.</b> Bewertet werden nur dauerhafte Eigenschaften. Harte Fakten (Maße, Gewicht, Material, Wassersäule) aus offiziellen Herstellerquellen verifiziert; jede Karte zeigt „Verlässlichkeit" (hoch = mehrfach belegt, mittel = nur 1 Quelle oder Quellen-Widerspruch) und listet offene Datenpunkte. „k.A." = herstellerseitig nicht publiziert (z.B. Hilleberg Wassersäule) — nicht geschätzt.<br>'+
+  '<b>Bewusst nicht bewertet:</b> Preis und Verfügbarkeit (nicht zuverlässig live erfassbar, ändern sich ständig) — pro Zelt nur ein neutraler „Preis live prüfen"-Link. Weiche Urteile (Haltbarkeit, Belüftung, Wetter) sind Einordnungen aus unabhängigen Tests (OutdoorGearLab, Switchback, SectionHiker, Trailspace), mit Quelle je Zelt.<br>'+
+  '<b>Stand:</b> 04.07.2026 · '+Z.length+' verifizierte Modelle + 4 nicht-verifizierbare Budget-Zelte.';
+}
+
+function excludeTent(n){EX[n]=1;render()}
+function resetEx(){EX={};render()}
+window.openCard=openCard;window.setSort=setSort;window.excludeTent=excludeTent;window.resetEx=resetEx;
+render();
+</script>
+</body>
+</html>
